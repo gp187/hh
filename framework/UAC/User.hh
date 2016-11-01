@@ -7,7 +7,7 @@
 namespace Opes\UAC;
 
 
-class User {
+final class User {
     public Map<string,mixed> $access;
 
     public function __construct():void {

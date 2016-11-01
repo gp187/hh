@@ -5,6 +5,11 @@ namespace Opes;
  *    System:: dependencies belonging to the system
  *      >> spl_autoload comes later. Need to group and make components
  */
+
+ require __DIR__.'/Base/WebController.hh';
+
+
+
 // -->Request: parse incomming request
   require __DIR__.'/Http/Request.hh';
   require __DIR__.'/Http/Headers/RequestHeader.hh';

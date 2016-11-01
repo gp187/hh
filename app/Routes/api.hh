@@ -14,17 +14,17 @@ Opes\Http\Router::options(shape('prefix' => 'api/v1'));
 
 
 // -->Set: route block
-Opes\Http\Router::addZone('user',shape(
+Opes\Http\Router::addZone('user',Map{
     'list' => shape(
           'path' => 'list',
-          'method' => 'GET',
+          'method' => Opes\Http\HttpMethod::GET,
           'component' => Opes\UAC\User::class,
           'controller' => "list"
       ),
     'profile/@userId' => shape(
-            'path' => 'profile/@userId',
-            'method' => 'GET',
-            'component' => Opes\UAC\User::class,
-            'controller' => "profile"
-        )
-), shape('prefix' => 'api/v1'));
+          'path' => 'profile/@userId',
+          'method' => Opes\Http\HttpMethod::GET,
+          'component' => Opes\UAC\User::class,
+          'controller' => "profile"
+      )
+}, shape('prefix' => 'api/v1'));
