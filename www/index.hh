@@ -1,4 +1,4 @@
-<?hh
+<?hh //decl
 // -->Start: the framework
 require __DIR__.'/../framework/Start.hh';
 
