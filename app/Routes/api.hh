@@ -18,8 +18,8 @@ Opes\Http\Router::addZone('user',Map{
     'list' => shape(
           'path' => 'list',
           'method' => Opes\Http\HttpMethod::GET,
-          'component' => Opes\UAC\User::class,
-          'controller' => "list"
+          'component' => Opes\UAC\User::class, // << main class to access
+          'controller' => "list" // << function to run to generate output {$component}->Controller()
       ),
     'profile/@userId' => shape(
           'path' => 'profile/@userId',
