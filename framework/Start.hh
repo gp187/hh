@@ -6,6 +6,7 @@ namespace Opes;
  *      >> spl_autoload comes later. Need to group and make components
  */
 
+ require __DIR__.'/Base/Common.hh';
  require __DIR__.'/Base/WebController.hh';
 
 
