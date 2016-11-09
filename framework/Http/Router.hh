@@ -31,14 +31,13 @@ type route = shape(
 const string DS = '/';
 
 
-class Router{
-  public static ImmMap<string,route> $routes = ImmMap{};
+final class Router{
+  public static Map<string,route> $routes = Map{};
   public static Set<string> $prefixes = Set{};
   public static Set<string> $paths = Set{};
   private static ImmMap<string,string> $defaults = ImmMap{
     'prefix' => 'api/v1'
   };
-  public function __construct(): void{}
 
   /*
       addZone :: add routing zone to the current route list
@@ -47,80 +46,65 @@ class Router{
       // -->Set: route
       $routes = Map{};
       $prefix = DS.Shapes::idx($o, 'prefix', self::$defaults->get('prefix'));
-      if (!self::$prefixes->contains($prefix)) self::$prefixes->add($prefix);
-      $route = DS.$slug;
+      if (!self::$prefixes->contains($prefix)) self::$prefixes->add($prefix.DS);
       // -->Iterate
       $iterator = $r->getIterator();
       // -->Loop
       while($iterator->valid()) {
           // -->Add: full path
-          $key = $route.DS.$iterator->key();
+          $key = $slug.DS.$iterator->key();
           self::$paths->add($key);
           // -->Make: route object
-          $routes->add(Pair{(string) $key, $iterator->current() });
+          self::$routes->add(Pair{(string) $key, $iterator->current() });
           // -->Next
           $iterator->next();
       }
-      self::$routes = $routes->toImmMap();
-
-      var_dump(self::$routes);
-
       return true;
-  }
-  /*
-    updateZone:: update existing zone
-  */
-  public static function updateZone(ImmMap<string,mixed> $r): void{
-
-  }
-  /*
-    removeZone:: delete existing zone
-  */
-  public static function removeZone(ImmMap<string,mixed> $r): void{
-
   }
 
   /*
     validateRoute :: get current route and see if you can find an associated function
   */
-  public static function routeExists(string $route): bool {
-      $validPrefix = false;
+  public static function routeExists(string $route): ?route {
+      $return = null;
+      $requestRoute = Set{};
 
       // -->Match: the current prefix to one of the authorized ones
       $it = self::$prefixes->getIterator();
       while($it->valid()) {
           if (startsWith($route, $it->current())) {
-            $route = explode(DS, (string) str_replace($it->current(), "", $route));
-            $validPrefix = true;
-            break;
+              $requestRoute = new Set(explode(DS, (string) str_replace($it->current(), "", $route)));
+              break;
           }
           $it->next();
       }
+      if (!$requestRoute) return null;
 
-      // -->TODO:: get the route object and return it so I can use it and call the object and function
-      // -->TODO:: get the route object and return it so I can use it and call the object and function
-      // -->TODO:: get the route object and return it so I can use it and call the object and function
-      // -->TODO:: get the route object and return it so I can use it and call the object and function
-      // -->TODO:: get the route object and return it so I can use it and call the object and function
-      // -->TODO:: get the route object and return it so I can use it and call the object and function
-      // -->TODO:: get the route object and return it so I can use it and call the object and function
-      // -->TODO:: get the route object and return it so I can use it and call the object and function
-      // -->TODO:: get the route object and return it so I can use it and call the object and function
-      // -->TODO:: get the route object and return it so I can use it and call the object and function 
-
-      if (!$validPrefix) return false;
-      // -->Match: the route to $route shape
+      // -->Match: match the route's first value and eliminate what others don't match
       $it = self::$routes->getIterator();
       while ($it->valid()) {
-          $rr = explode(DS, $it->key());
+          $serverRoute = new Set(explode(DS, $it->key()));
 
+          $itt = $requestRoute->getIterator();
+          while ($itt->valid()) {
+              if (!self::routeEquals($itt->current(),(string) $serverRoute->firstValue())) break;
+              $serverRoute = $serverRoute->skip(1);
+              // if this is the last in the server route, then we gotti
+              if ($itt->current() == $requestRoute->lastValue())
+                  return $it->current();
+              $itt->next();
+          }
+          $it->next();
       }
-
-      return false;
+      return $return;
   }
   // -->Set: options
   public static function options(settings $r) : void{
 
+  }
+
+  private static function routeEquals(string $declaredRoute, string $incommingRoute): bool {
+       return (substr($declaredRoute, 0, 1) == '@') ? true : ($declaredRoute == $incommingRoute);
   }
 }
 }

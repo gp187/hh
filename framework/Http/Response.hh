@@ -1,16 +1,58 @@
 <?hh //strict
-/**
-
+/*
+    Response:: this is the response object that maps the $controller with the function and calls it
 */
-namespace Opes\Http;
-use Opes\Http\Headers\GET as GET;
-use Opes\Http\Headers\POST as POST;
-use Opes\Http\Headers\PUT as PUT;
-use Opes\Http\Headers\PATCH as PATCH;
-use Opes\Http\Headers\DELETE as DELETE;
+namespace Opes\Http {
+
+final class Response {
+
+    public function __construct(
+      public ?route $route
+    ): void {
+        $this->execute();
+    }
+    // -->Execute: the incomming request
+    public function execute(): void {
+        echo "------------<br>";
+        var_dump($this->route);
+        echo "------------<br>";
 
 
-class Response {
+        $call = meth_caller(
+          '\Opes\UAC\User',
+          'list'
+        );
+        $c = new \Opes\UAC\User();
+
+        var_dump($call($c));
+        // $call = class_meth(
+        //   $this->route['component'],
+        //   $this->route['controller']
+        // );
 
 
+
+        // TODO: run the current route by controller and function
+        // TODO: run the current route by controller and function
+        // TODO: run the current route by controller and function
+        // TODO: run the current route by controller and function
+        // TODO: run the current route by controller and function
+        // TODO: run the current route by controller and function
+        // TODO: run the current route by controller and function
+        // TODO: run the current route by controller and function
+        // TODO: run the current route by controller and function
+        // TODO: run the current route by controller and function
+        // TODO: run the current route by controller and function
+        // TODO: run the current route by controller and function
+        // TODO: run the current route by controller and function
+        // TODO: run the current route by controller and function
+        // TODO: run the current route by controller and function
+
+    }
+    // -->JSON: format output to JSON
+    public function json(): string {
+
+        return '{}';
+    }
+}
 }
